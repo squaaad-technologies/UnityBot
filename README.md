@@ -1,2 +1,2 @@
 # bot
-fuck me gently with a chainsaw
+fuck me really hard with an active chainsaw
