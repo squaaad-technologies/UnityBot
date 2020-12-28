@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # UnityBot
 [![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://GitHub.com/squaaad-technologies/UnityBot/commit-activity)
 [![Analytics](https://ga-beacon.appspot.com/G-4DCT4RPNT0/github.com/squaaad-technologies/UnityBot)](https://GitHub.com/squaaad-technologies/UnityBot/)
@@ -147,3 +148,5 @@ Will attempt to search for user based on query if one is not expressly mentioned
 Reason for muting user. Default: `No reason provided.` Not required.
 
 ### sq!strike
+=======
+

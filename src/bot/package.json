@@ -1,0 +1,23 @@
+{
+  "name": "unity-bot",
+  "version": "0.1.0",
+  "description": "make me love you",
+  "main": "bot.js",
+  "scripts": {
+    "test": "node bot"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/squaaad-technonogies/bot.git"
+  },
+  "author": "Dani, Jrd, and Jai L.",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/squaaad-technonogies/bot/issues"
+  },
+  "homepage": "https://github.com/squaaad-technonogies/bot#readme",
+  "dependencies": {
+    "discord.js": "^12.3.1",
+    "ytdl-core": "^3.4.1"
+  }
+}
