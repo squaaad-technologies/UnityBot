@@ -1,0 +1,4 @@
+src/*.json
+src/*.sqlite3
+node_modules/
+backups/

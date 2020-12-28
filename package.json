@@ -1,0 +1,27 @@
+{
+  "name": "unity-bot",
+  "version": "1.0.0",
+  "description": "Unity Bot! Made using Discord.js-commando and sqlite3!",
+  "main": "src/main.js",
+  "scripts": {
+    "test": "node ."
+  },
+  "author": "Jai L, Dani, Jrd.",
+  "license": "UNLICENSED",
+  "dependencies": {
+    "@discordjs/opus": "^0.3.3",
+    "bufferutil": "^4.0.2",
+    "common-tags": "^1.8.0",
+    "discord.js": "^12.5.1",
+    "discord.js-commando": "github:discordjs/Commando",
+    "express": "^4.17.1",
+    "ffmpeg-static": "^4.2.7",
+    "node-fetch": "^2.6.1",
+    "simple-youtube-api": "^5.2.1",
+    "snekfetch": "^4.0.4",
+    "sqlite": "^4.0.18",
+    "tnai": "^1.0.5",
+    "utf-8-validate": "^5.0.3",
+    "ytdl-core": "^4.1.4"
+  }
+}
