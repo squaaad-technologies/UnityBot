@@ -100,9 +100,10 @@ client.registry
     .registerDefaults()
     .registerGroups([
         ['music', 'Music related commands'],
-        ['actions', 'Actions you can to to other users.'],
+        ['actions', 'Actions'],
         ['ws', 'webserver-related commands'],
-        ['mod','Moderation commands.'],
+        ['mod','Moderation commands'],
+        ['fun', 'Fun commands']
     ])
     //.registerTypesIn(path.join(__dirname, 'types'))
     .registerCommandsIn(path.join(__dirname, 'commands'))

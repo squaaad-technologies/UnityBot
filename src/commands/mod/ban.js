@@ -8,7 +8,7 @@ module.exports = class Ban extends Command{
             name: "ban",
             memberName: "ban",
             group: "mod",
-            aliases: ['ultrayeet'],
+            aliases: ['ultrayeet', 'megayeet'],
             userPermissions: ['BAN_MEMBERS'],
             clientPermissions: ['BAN_MEMBERS'],
             args: [
