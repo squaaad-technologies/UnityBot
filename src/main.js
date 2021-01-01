@@ -6,11 +6,8 @@ const oneLine = require('common-tags').oneLine;
 const { Structures } = require('discord.js');
 const { Worker } = require('worker_threads');
 const fs = require('fs')
-
+//const { MongoClient } = require('mongodb');
 var webserver;
-
-
-
 
 Structures.extend('Guild', Guild => {
     class MusicGuild extends Guild {
@@ -33,6 +30,9 @@ Structures.extend('Guild', Guild => {
     return MusicGuild;
 });
 
+
+
+
 const client = new commando.Client({
   owner: '98133204636028928',
   commandPrefix: "sq!",
@@ -41,9 +41,14 @@ client.on("error", console.error)
   .on("warn", console.warn)
   .on("debug", console.log)
   .on("ready", () => {
+    //client.mongoIsReady = false;
     console.log(
-      `Client ready; logged in as ${client.user.username}#${client.user.discriminator} (${client.user.id})`
+      `Client ready; logged in as ${client.user.username}#${client.user.discriminator} (${client.user.id}) [MONGO STATUS: NOT READY]`
     );
+    //const mongo = MongoClient(require('./auth.json').mongo);
+    //mongo.connect()
+    //.then(() => {client.mongoIsReady = true; console.log(`Client Ready; Mongo connected.`); client.MONGO = mongo;})
+    //.catch(err => {console.error(error)});
   })
   .on("disconnect", () => {
     console.warn("Disconnected!");
@@ -85,13 +90,18 @@ client.on("error", console.error)
         ${guild ? `in guild ${guild.name} (${guild.id})` : "globally"}.
     `);
   })
+  /*
   .on('WSStartCommand', () => {
     console.warn('WEBSERVER START COMMAND CALLED, STARTING WEBSERVER.');
     startWebServer();
   })
+  .on('blacklistAdd', (uid, originServer) => {
+    
+  })
+  */
 
 
-  client.setProvider(
+client.setProvider(
   sqlite
     .open(path.join(__dirname, "settings.sqlite3"))
     .then((db) => new commando.SQLiteProvider(db))
@@ -101,13 +111,13 @@ client.registry
     .registerGroups([
         ['music', 'Music related commands'],
         ['actions', 'Actions'],
-        ['ws', 'webserver-related commands'],
         ['mod','Moderation commands'],
         ['fun', 'Fun commands']
     ])
     //.registerTypesIn(path.join(__dirname, 'types'))
     .registerCommandsIn(path.join(__dirname, 'commands'))
 ;
+/*
 function startWebServer(){
   webserver = new Worker(path.join(__dirname, 'webserver.js'));
   regWS(webserver);
@@ -128,6 +138,6 @@ function regWS(ws){
 
 
 
-
+*/
 
 client.login(token)
