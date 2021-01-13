@@ -1,24 +1,24 @@
 const commando = require("discord.js-commando");
 const sqlite = require("sqlite");
-const token = require("./auth.json").token;
+const {token, mongo, youtube} = getEnviron();
 const path = require('path');
 const oneLine = require('common-tags').oneLine;
 const { Structures } = require('discord.js');
 const { Worker } = require('worker_threads');
 const fs = require('fs')
-//const { MongoClient } = require('mongodb');
+const { MongoClient } = require('mongodb');
 var webserver;
 
 Structures.extend('Guild', Guild => {
     class MusicGuild extends Guild {
       constructor(client, data) {
         super(client, data);
-        this.musicData = {
-          queue: [],
+        this.VoiceManager = {
           isPlaying: false,
-          volume: 1,
-          songDispatcher: null
-        };
+          queue: [],
+          audioDispatch: null,
+          VoiceConnection: null,
+        }
         this.metadata = {
           caseNum: 1,
           logsChannel: 0,
@@ -30,7 +30,27 @@ Structures.extend('Guild', Guild => {
     return MusicGuild;
 });
 
+Structures.extend('GuildMember', GuildMember => {
+  class BetterGuildUser extends GuildMember {
+    constructor(c, d, g){
+      super(c, d, g)
+      this.c = c
+    }
+    from(user, g, c){
+      if(typeof user !== 'User'){
+        return null;
+      } else {
+        return new this(c,user,g)
+      }
+    }
+  }
+  return BetterGuildUser
+})
 
+
+if (token == null){
+  throw new Error('ENVIRON VARIABLES ARE NOT DEFINED! EXITING.');
+}
 
 
 const client = new commando.Client({
@@ -41,14 +61,19 @@ client.on("error", console.error)
   .on("warn", console.warn)
   .on("debug", console.log)
   .on("ready", () => {
-    //client.mongoIsReady = false;
+    client.auth = {
+      youtube,
+      token,
+      mongo
+    };
     console.log(
       `Client ready; logged in as ${client.user.username}#${client.user.discriminator} (${client.user.id}) [MONGO STATUS: NOT READY]`
     );
-    //const mongo = MongoClient(require('./auth.json').mongo);
-    //mongo.connect()
-    //.then(() => {client.mongoIsReady = true; console.log(`Client Ready; Mongo connected.`); client.MONGO = mongo;})
-    //.catch(err => {console.error(error)});
+    const mongo_cl = MongoClient(mongo, { useNewUrlParser: true });
+    mongo.connect()
+    .then(() => {client.mongoIsReady = true; console.log(`Client Ready; Mongo connected.`); client.MONGO = mongo_cl;})
+    .catch(err => {console.error(err)});
+    this.emit('AuthSet')
   })
   .on("disconnect", () => {
     console.warn("Disconnected!");
@@ -90,7 +115,7 @@ client.on("error", console.error)
         ${guild ? `in guild ${guild.name} (${guild.id})` : "globally"}.
     `);
   })
-  /*
+  
   .on('WSStartCommand', () => {
     console.warn('WEBSERVER START COMMAND CALLED, STARTING WEBSERVER.');
     startWebServer();
@@ -98,7 +123,7 @@ client.on("error", console.error)
   .on('blacklistAdd', (uid, originServer) => {
     
   })
-  */
+  
 
 
 client.setProvider(
@@ -112,12 +137,13 @@ client.registry
         ['music', 'Music related commands'],
         ['actions', 'Actions'],
         ['mod','Moderation commands'],
-        ['fun', 'Fun commands']
+        ['fun', 'Fun commands'],
+        ['bl','Global Blacklist Commands']
     ])
     //.registerTypesIn(path.join(__dirname, 'types'))
     .registerCommandsIn(path.join(__dirname, 'commands'))
 ;
-/*
+
 function startWebServer(){
   webserver = new Worker(path.join(__dirname, 'webserver.js'));
   regWS(webserver);
@@ -136,8 +162,32 @@ function regWS(ws){
   })
 }
 
-
-
-*/
+function getEnviron() {
+  var { existsSync } = require('fs');
+  var { join } = require('path')
+  if (existsSync(join(__dirname, 'auth.json'))){
+    var cfg = require(join(__dirname, 'auth.json'));
+    if (cfg.hasOwnProperty('token') && cfg.hasOwnProperty('mongo') && cfg.hasOwnProperty('youtubeAPIkey') /*&& cfg.hasOwnProperty() && cfg.hasOwnProperty() && cfg.hasOwnProperty() */){
+      return {
+        token: cfg.token,
+        mongo: cfg.mongo,
+        youtube: cfg.youtubeAPIkey
+      };
+    };
+  };
+  var cfg = process.env;
+  if (cfg.hasOwnProperty('token') && cfg.hasOwnProperty('mongo') && cfg.hasOwnProperty('youtubeAPIkey') /*&& cfg.hasOwnProperty() && cfg.hasOwnProperty() && cfg.hasOwnProperty() */){
+    return {
+      token: cfg.token,
+      mongo: cfg.mongo,
+      youtube: cfg.youtubeAPIkey
+    };
+  };
+  return {
+    token: null,
+    mongo: null,
+    youtube: null
+  };
+}
 
 client.login(token)
